@@ -6,6 +6,9 @@
 ## stalling @17:53
 3080
 
+## stalling @18:19
+2975
+
 ## stalling @19:19
 2685
 
@@ -15,9 +18,11 @@
 ## forwarding and branch prediction @17:53
 1599
 
+## forwarding @18:19
+1579
+
 ## forwarding @19:19
 1414
-
 
 ## collect values after the run
 ```

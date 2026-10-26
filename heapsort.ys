@@ -34,9 +34,8 @@ get_element:
 #     %rsi: element
 
 put_element:
-	addq   %rdi, %rdi
-	addq   %rdi, %rdi
-	addq   %rdi, %rdi
+	irmovq $8, %r10
+	mulq   %r10, %rdi
 	rmmovq %rsi, heap(%rdi)
 	ret
 
@@ -189,7 +188,7 @@ ha_continue:
 	rrmovq %r12, %rsi
 	pushq  %rdi
 	call   heapify_node     # Heapify the node
-        popq   %rdi
+  popq   %rdi
 	
 	irmovq $1, %rdi         # i--
 	subq   %rdi, %rbx
@@ -248,10 +247,9 @@ hs_continue:
 	call   extract_max
 
 	rrmovq %rbx, %rsi       # heap[i] = max
-	addq   %rsi, %rsi
-	addq   %rsi, %rsi
-	addq   %rsi, %rsi
-        rmmovq %rax, heap(%rsi)
+	irmovq $8, %r10
+	mulq %r10, %rsi
+  rmmovq %rax, heap(%rsi)
 
 	irmovq $1, %rdi         # i--
 	subq   %rdi, %rbx

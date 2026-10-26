@@ -1,11 +1,16 @@
-# BEFORE
+# RECORDS
 
 ## stalling before
 3300 1232
 
+## stalling @17:53
+3080
+
 ## forwarding and branch prediction
 1643 1232
 
+## forwarding and branch prediction @17:53
+1599
 
 ## collect values after the run
 ```

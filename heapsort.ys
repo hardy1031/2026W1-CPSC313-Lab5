@@ -23,9 +23,8 @@ main:
 #     %rax: the element
 
 get_element:
-	addq   %rdi, %rdi
-	addq   %rdi, %rdi
-	addq   %rdi, %rdi
+	irmovq $8, %r10
+	mulq   %r10, %rdi					# to get the byte offset (8*R[rdi])
 	mrmovq heap(%rdi), %rax
 	ret
 	
@@ -47,7 +46,8 @@ put_element:
 #    %rsi: index2
 #
 #
-swap:	pushq  %r12             # Callee save register
+swap:	
+  pushq  %r12             # Callee save register
 	pushq  %rsi             # Save these too as we'll need them later
 	pushq  %rdi
 	

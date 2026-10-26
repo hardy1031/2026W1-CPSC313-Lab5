@@ -12,6 +12,8 @@
 ## forwarding and branch prediction @17:53
 1599
 
+## forwarding @19:19
+1414
 ## collect values after the run
 ```
 0x1000: 0xc1ba9

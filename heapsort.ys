@@ -114,20 +114,24 @@ heapify_node:
 	rrmovq %rdi, %rbx
 
 heapify_loop:
-	rrmovq %rbx, %rdi       # left_child = 2 * index + 1
+	irmovq $8, %r10          # constant for index -> offset
+	rrmovq %rbx, %rdi        # left_child = 2 * index + 1
 	addq   %rdi, %rdi
-	irmovq $1,   %r8
+	irmovq $1, %r8
 	addq   %r8,  %rdi
-	rrmovq %r12, %rsi
-	rrmovq %r13, %rdx
 
-	pushq  %rdi             # save this as we'll need it after the call
-	call   check_child
-	popq   %rdi
-	andq   %rax, %rax
-
-	je     heapify_skip1    # highest = left_child (if condition ok)
-	rrmovq %rdi, %r12       
+	rrmovq %rdi, %r11        # left_child > last → skip
+	subq   %r13, %r11
+	jg     heapify_skip1
+	rrmovq %rdi, %rcx        # heap[left_child]   (get_element inlined)
+	mulq   %r10, %rcx
+	mrmovq heap(%rcx), %rcx
+	rrmovq %r12, %rdx        # heap[highest]      (get_element inlined)
+	mulq   %r10, %rdx
+	mrmovq heap(%rdx), %rdx
+	subq   %rdx, %rcx        # heap[left] > heap[highest]
+	jle    heapify_skip1
+	rrmovq %rdi, %r12        # highest = left_child
 
 heapify_skip1:
 	rrmovq %rbx, %rdi       # right_child = 2 * index + 2

@@ -134,19 +134,21 @@ heapify_loop:
 	rrmovq %rdi, %r12        # highest = left_child
 
 heapify_skip1:
-	rrmovq %rbx, %rdi       # right_child = 2 * index + 2
-	addq   %rdi, %rdi
-	irmovq $2,   %r8	
-	addq   %r8,  %rdi
-	rrmovq %r12, %rsi
-	rrmovq %r13, %rdx
+	heapify_skip1:
+	addq   %r8,  %rdi        # right_child = left_child + 1  (%r8 is still 1)
+	rrmovq %rdi, %r11        # right_child > last → skip
+	subq   %r13, %r11
+	jg     heapify_skip2
+	rrmovq %rdi, %rcx        # heap[right_child]  (get_element inlined)
+	mulq   %r10, %rcx
+	mrmovq heap(%rcx), %rcx
+	rrmovq %r12, %rdx        # heap[highest]      (get_element inlined)
+	mulq   %r10, %rdx
+	mrmovq heap(%rdx), %rdx
+	subq   %rdx, %rcx        # heap[right] > heap[highest] ?
+	jle    heapify_skip2
+	rrmovq %rdi, %r12        # highest = right_child
 
-	pushq  %rdi             # save this as we'll need it after the call
-	call   check_child
-	popq  %rdi
-	andq   %rax, %rax
-	je     heapify_skip2
-	rrmovq %rdi, %r12       # highest = right_child (if condition ok)
 
 heapify_skip2:
 	rrmovq %r12, %rdi

@@ -47,7 +47,7 @@ put_element:
 #
 #
 swap:	
-  pushq  %r12             # Callee save register
+	pushq  %r12             # Callee save register
 	pushq  %rsi             # Save these too as we'll need them later
 	pushq  %rdi
 	

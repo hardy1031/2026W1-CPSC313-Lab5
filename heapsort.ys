@@ -46,25 +46,13 @@ put_element:
 #
 #
 swap:	
-	pushq  %r12             # Callee save register
-	pushq  %rsi             # Save these too as we'll need them later
-	pushq  %rdi
-	
-	call   get_element      # tmp = heap[index1]
-	rrmovq %rax, %r12
-	
-	rrmovq %rsi, %rdi       # tmp2 = heap[index2]
-	call   get_element
-
-	popq   %rdi             # heap[index1] = tmp2
-	rrmovq %rax, %rsi
-	call   put_element
-
-	popq   %rdi             # heap[index2] = tmp (yes, %rdi not %rsi)
-	rrmovq %r12, %rsi
-	call   put_element
-
-	popq %r12
+	irmovq $8, %r10
+	mulq   %r10, %rdi              # %rdi = index1 * 8
+	mulq   %r10, %rsi              # %rsi = index2 * 8
+	mrmovq heap(%rdi), %rax        # %rax = heap[index1]
+	mrmovq heap(%rsi), %rcx        # %rcx = heap[index2]
+	rmmovq %rax, heap(%rsi)        # heap[index2] = old heap[index1]
+	rmmovq %rcx, heap(%rdi)        # heap[index1] = old heap[index2]
 	ret
 
 #

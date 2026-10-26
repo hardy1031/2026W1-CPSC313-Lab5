@@ -154,10 +154,17 @@ heapify_skip2:
 	ret
 
 heapify_continue:
+	irmovq $8, %r10
 	rrmovq %r12, %rdi
 	rrmovq %rbx, %rsi
-	call   swap
-
+	# swap function (inlined)
+	mulq   %r10, %rdi              # %rdi = index1 * 8
+	mulq   %r10, %rsi              # %rsi = index2 * 8
+	mrmovq heap(%rdi), %rax        # %rax = heap[index1]
+	mrmovq heap(%rsi), %rcx        # %rcx = heap[index2]
+	rmmovq %rax, heap(%rsi)        # heap[index2] = old heap[index1]
+	rmmovq %rcx, heap(%rdi)        # heap[index1] = old heap[index2]
+	# swap done
 	rrmovq %r12, %rbx
 	jmp    heapify_loop
 

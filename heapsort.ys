@@ -134,7 +134,6 @@ heapify_loop:
 	rrmovq %rdi, %r12        # highest = left_child
 
 heapify_skip1:
-	heapify_skip1:
 	addq   %r8,  %rdi        # right_child = left_child + 1  (%r8 is still 1)
 	rrmovq %rdi, %r11        # right_child > last → skip
 	subq   %r13, %r11
@@ -256,19 +255,22 @@ hs_ret:	popq   %rbx
 	ret
 
 hs_continue:
-	rrmovq %rbx, %rdi       # max = extract_max(i)
-	call   extract_max
-
-	rrmovq %rbx, %rsi       # heap[i] = max
 	irmovq $8, %r10
-	mulq %r10, %rsi
-  rmmovq %rax, heap(%rsi)
-
-	irmovq $1, %rdi         # i--
+	rrmovq %rbx, %rsi
+	mulq   %r10, %rsi        # %rsi = i * 8
+	xorq   %rdi, %rdi        # %rdi = 0
+	mrmovq heap(%rdi), %rax  # max = heap[0]
+	mrmovq heap(%rsi), %rcx  # tmp = heap[i]
+	rmmovq %rax, heap(%rsi)  # heap[i] = max  (heapify only touches 0..i-1)
+	rmmovq %rcx, heap(%rdi)  # heap[0] = tmp
+	irmovq $1, %r8
+	rrmovq %rbx, %rsi
+	subq   %r8, %rsi         # %rsi = i - 1
+	call   heapify_node      # heapify_node(0, i - 1)
+	irmovq $1, %rdi          # i--
 	subq   %rdi, %rbx
 	jmp    hs_loop
-	popq   %rbx
-	ret
+
 
 #
 # Array to sort
